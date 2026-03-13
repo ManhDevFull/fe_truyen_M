@@ -6,6 +6,7 @@ import SiteHeader from "./components/site-header";
 import FollowNotifications from "./components/follow-notifications";
 import AdblockGuard from "./components/adblock-guard";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "TruyenM",
@@ -22,10 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Script src="/ads.js" strategy="afterInteractive" />
+        <Suspense fallback={<div className="h-14" />}>
+          <SiteHeader />
+        </Suspense>
         <Providers>
           <Toaster richColors position="top-right" />
           <AdblockGuard />
-          <SiteHeader />
           <FollowNotifications />
           <main className="container !py-0">{children}</main>
           <footer className="mt-6 border-t border-black/10 bg-white">
