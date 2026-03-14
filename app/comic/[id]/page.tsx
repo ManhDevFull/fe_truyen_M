@@ -16,6 +16,7 @@ export default function ComicPage({ params }: { params: { id: string } }) {
   const { data, isLoading, error } = useComic(id);
   const [isFollowed, setIsFollowed] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
+  const [coverFailed, setCoverFailed] = useState(false);
 
   useEffect(() => {
     setIsFollowed(Boolean(data?.is_followed));
@@ -25,6 +26,11 @@ export default function ComicPage({ params }: { params: { id: string } }) {
   if (error || !data) return <div className="text-sm text-red-600">Không tìm thấy truyện.</div>;
 
   const { comic, chapters } = data;
+  const rawCover = comic.cover || "";
+  const cover =
+    rawCover.startsWith("http://res.cloudinary.com/") || rawCover.startsWith("http://")
+      ? rawCover.replace("http://", "https://")
+      : rawCover;
 
   async function toggleFollow() {
     if (!token) {
@@ -60,8 +66,24 @@ export default function ComicPage({ params }: { params: { id: string } }) {
   return (
     <div className="space-y-6">
       <div className="card p-6">
-        <div className="flex items-start gap-4">
-          <div className="h-28 w-24 rounded-lg bg-black/10" />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+          <div className="w-28 overflow-hidden rounded-lg bg-black/10 sm:w-32 md:w-40">
+            <div className="aspect-[3/4] w-full">
+              {cover && !coverFailed ? (
+                <img
+                  src={cover}
+                  alt={comic.title}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  onError={() => setCoverFailed(true)}
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-xs text-black/40">
+                  Chưa có ảnh
+                </div>
+              )}
+            </div>
+          </div>
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-2xl font-semibold">{comic.title}</h1>

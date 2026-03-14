@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useComics, useGenres } from "../../lib/hooks";
 import type { Comic } from "../../lib/types";
@@ -17,31 +18,41 @@ export default function HomeClient() {
 
   const gridClass = "grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
 
-  const ComicCard = ({ comic }: { comic: Comic }) => (
-    <Link
-      href={`/comic/${comic.id}`}
-      className="group rounded-xl border border-black/10 bg-white p-2 transition hover:-translate-y-0.5 hover:shadow-md"
-    >
-      <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-black/10">
-        {comic.cover ? (
-          <img
-            src={comic.cover}
-            alt={comic.title}
-            loading="lazy"
-            className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-xs text-black/40">
-            Chưa có ảnh
-          </div>
-        )}
-      </div>
-      <div className="mt-2 space-y-0.5">
-        <p className="text-xs font-semibold truncate">{comic.title}</p>
-        <p className="text-[11px] text-black/60 truncate">{comic.author || "Đang cập nhật"}</p>
-      </div>
-    </Link>
-  );
+  const ComicCard = ({ comic }: { comic: Comic }) => {
+    const [failed, setFailed] = useState(false);
+    const rawCover = comic.cover || "";
+    const cover =
+      rawCover.startsWith("http://res.cloudinary.com/") || rawCover.startsWith("http://")
+        ? rawCover.replace("http://", "https://")
+        : rawCover;
+
+    return (
+      <Link
+        href={`/comic/${comic.id}`}
+        className="group rounded-xl border border-black/10 bg-white p-2 transition hover:-translate-y-0.5 hover:shadow-md"
+      >
+        <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-black/10">
+          {cover && !failed ? (
+            <img
+              src={cover}
+              alt={comic.title}
+              loading="lazy"
+              className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+              onError={() => setFailed(true)}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-xs text-black/40">
+              Chưa có ảnh
+            </div>
+          )}
+        </div>
+        <div className="mt-2 space-y-0.5">
+          <p className="text-xs font-semibold truncate">{comic.title}</p>
+          <p className="text-[11px] text-black/60 truncate">{comic.author || "Đang cập nhật"}</p>
+        </div>
+      </Link>
+    );
+  };
 
   return (
     <div className="space-y-10">
