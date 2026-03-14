@@ -67,7 +67,7 @@ export default function ComicPage({ params }: { params: { id: string } }) {
     <div className="space-y-6">
       <div className="card p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-          <div className="w-28 overflow-hidden rounded-lg bg-black/10 sm:w-32 md:w-40">
+          <div className="w-32 overflow-hidden rounded-lg bg-black/10 sm:w-40 md:w-48 lg:w-56">
             <div className="aspect-[3/4] w-full">
               {cover && !coverFailed ? (
                 <img
