@@ -10,16 +10,28 @@ import { Suspense } from "react";
 
 export const metadata = {
   title: "TruyenM",
-  description: "Nền tảng đọc truyện nhẹ và nhanh"
+  description: "Nền tảng đọc truyện nhẹ và nhanh",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="vi">
       <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7134762434266982"
+          crossOrigin="anonymous"
+        ></script>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#c7522a" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
       </head>
       <body>
         <Script src="/ads.js" strategy="afterInteractive" />
@@ -38,8 +50,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <img src="/logo.svg" alt="TruyenM" className="h-7 w-7" />
                   <span>TruyenM</span>
                 </div>
-                <p className="mt-2 text-black/60">Nền tảng đọc truyện nhẹ và nhanh.</p>
-                <p className="mt-2 text-black/60">Địa chỉ: 123 Nguyễn Trãi, TP.HCM</p>
+                <p className="mt-2 text-black/60">
+                  Nền tảng đọc truyện nhẹ và nhanh.
+                </p>
+                <p className="mt-2 text-black/60">
+                  Địa chỉ: 123 Nguyễn Trãi, TP.HCM
+                </p>
               </div>
               <div>
                 <div className="font-medium">Liên hệ</div>
