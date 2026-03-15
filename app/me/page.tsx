@@ -1,12 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { apiFetch } from "../../lib/api";
 import { ReadingHistoryItem, User } from "../../lib/types";
 
 export default function MePage() {
+  const minWithdraw = 10000;
+  const [amount, setAmount] = useState(minWithdraw);
+  const [bankName, setBankName] = useState("");
+  const [bankAccount, setBankAccount] = useState("");
+  const [note, setNote] = useState("");
+
   const profile = useQuery({
     queryKey: ["me"],
     queryFn: () => apiFetch<User>("/api/me")
@@ -21,20 +27,8 @@ export default function MePage() {
   if (profile.error) return <div className="text-sm text-red-600">Login required.</div>;
 
   const points = profile.data?.points ?? 0;
-  const minWithdraw = 10000;
   const canWithdraw = points >= minWithdraw;
-
-  const [amount, setAmount] = useState(minWithdraw);
-  const [bankName, setBankName] = useState("");
-  const [bankAccount, setBankAccount] = useState("");
-  const [note, setNote] = useState("");
-
-  const withdrawals = useMemo(
-    () => [
-      // demo data placeholder
-    ],
-    []
-  );
+  const withdrawals: any[] = [];
 
   function submitWithdraw(e: React.FormEvent) {
     e.preventDefault();
