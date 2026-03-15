@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "adblock_detected";
 
 export default function AdblockGuard() {
   const [adblock, setAdblock] = useState<boolean | null>(null);
   const checkingRef = useRef(false);
+  const pathname = usePathname();
+  const [dismissedPath, setDismissedPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    setDismissedPath(null);
+  }, [pathname]);
 
   useEffect(() => {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
@@ -82,7 +89,7 @@ export default function AdblockGuard() {
     };
   }, []);
 
-  if (!adblock) return null;
+  if (!adblock || dismissedPath === pathname) return null;
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
@@ -103,6 +110,12 @@ export default function AdblockGuard() {
             className="rounded-lg border border-black/10 px-4 py-2 text-sm"
           >
             Tải lại trang
+          </button>
+          <button
+            onClick={() => setDismissedPath(pathname)}
+            className="rounded-lg border border-black/10 px-4 py-2 text-sm text-black/70"
+          >
+            Bỏ qua tạm thời
           </button>
         </div>
       </div>
