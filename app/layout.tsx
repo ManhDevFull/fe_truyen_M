@@ -33,60 +33,62 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
       </head>
-      <body>
+      <body className="min-h-screen">
         <Script src="/ads.js" strategy="afterInteractive" />
-        <Suspense fallback={<div className="h-14" />}>
-          <SiteHeader />
-        </Suspense>
-        <Providers>
-          <Toaster richColors position="top-right" />
-          <AdblockGuard />
-          <FollowNotifications />
-          <main className="container !py-0">{children}</main>
-          <footer className="mt-6 border-t border-black/10 bg-white">
-            <div className="container grid gap-6 py-8 text-sm md:grid-cols-3">
-              <div>
-                <div className="flex items-center gap-2 text-lg font-semibold">
-                  <img src="/logo.svg" alt="TruyenM" className="h-7 w-7" />
-                  <span>TruyenM</span>
+        <div className="flex min-h-screen flex-col">
+          <Suspense fallback={<div className="h-16" />}>
+            <SiteHeader />
+          </Suspense>
+          <Providers>
+            <Toaster richColors position="top-right" />
+            <AdblockGuard />
+            <FollowNotifications />
+            <main className="container flex-1 !pb-0 pt-5">{children}</main>
+            <footer className="mt-6 border-t border-black/10 bg-white">
+              <div className="container grid gap-6 py-8 text-sm md:grid-cols-3">
+                <div>
+                  <div className="flex items-center gap-2 text-lg font-semibold">
+                    <img src="/logo.svg" alt="TruyenM" className="h-7 w-7" />
+                    <span>TruyenM</span>
+                  </div>
+                  <p className="mt-2 text-black/60">
+                    Nền tảng đọc truyện nhẹ và nhanh.
+                  </p>
+                  <p className="mt-2 text-black/60">
+                    Địa chỉ: 123 Nguyễn Trãi, TP.HCM
+                  </p>
                 </div>
-                <p className="mt-2 text-black/60">
-                  Nền tảng đọc truyện nhẹ và nhanh.
-                </p>
-                <p className="mt-2 text-black/60">
-                  Địa chỉ: 123 Nguyễn Trãi, TP.HCM
-                </p>
+                <div>
+                  <div className="font-medium">Liên hệ</div>
+                  <ul className="mt-2 space-y-1 text-black/60">
+                    <li>Email: ntmanh@ntmanh.io.vn</li>
+                    <li>Điện thoại: 0900 000 000</li>
+                  </ul>
+                </div>
+                <div>
+                  <div className="font-medium">Giới thiệu</div>
+                  <ul className="mt-2 space-y-1 text-black/60">
+                    <li>
+                      <Link href="/about" className="hover:underline">
+                        Về chúng tôi
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/privacy" className="hover:underline">
+                        Chính sách bảo mật
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/terms" className="hover:underline">
+                        Điều khoản dịch vụ
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div>
-                <div className="font-medium">Liên hệ</div>
-                <ul className="mt-2 space-y-1 text-black/60">
-                  <li>Email: ntmanh@ntmanh.io.vn</li>
-                  <li>Điện thoại: 0900 000 000</li>
-                </ul>
-              </div>
-              <div>
-                <div className="font-medium">Giới thiệu</div>
-                <ul className="mt-2 space-y-1 text-black/60">
-                  <li>
-                    <Link href="/about" className="hover:underline">
-                      Về chúng tôi
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/privacy" className="hover:underline">
-                      Chính sách bảo mật
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/terms" className="hover:underline">
-                      Điều khoản dịch vụ
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </footer>
-        </Providers>
+            </footer>
+          </Providers>
+        </div>
       </body>
     </html>
   );
