@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useComics, useGenres } from "../../lib/hooks";
 import type { Comic } from "../../lib/types";
@@ -10,10 +10,12 @@ export default function HomeClient() {
   const params = useSearchParams();
   const genre = params.get("genre") || "";
   const q = (params.get("q") || "").trim();
-  const search = useComics(q ? { q } : undefined);
-  const latest = useComics({ sort: "id" });
-  const trending = useComics({ sort: "views" });
-  const byGenre = useComics(genre ? { genre } : undefined);
+  const [updatePage, setUpdatePage] = useState(1);
+  const showDefault = !q && !genre;
+  const search = useComics(q ? { q, limit: 20 } : undefined, { enabled: !!q });
+  const byGenre = useComics(genre ? { genre, limit: 20 } : undefined, { enabled: !!genre });
+  const trending = useComics({ sort: "views", limit: 10 }, { enabled: showDefault });
+  const updated = useComics({ sort: "updated", page: updatePage, limit: 20 }, { enabled: showDefault });
   const genres = useGenres();
 
   const gridClass = "grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
@@ -54,6 +56,17 @@ export default function HomeClient() {
     );
   };
 
+  const updateTotal = updated.data?.total ?? 0;
+  const updateLimit = updated.data?.limit ?? 20;
+  const updatePages = Math.max(1, Math.ceil(updateTotal / updateLimit));
+  const pageButtons = useMemo(() => {
+    const maxButtons = 5;
+    let start = Math.max(1, updatePage - 2);
+    let end = Math.min(updatePages, start + maxButtons - 1);
+    start = Math.max(1, end - maxButtons + 1);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }, [updatePage, updatePages]);
+
   return (
     <div className="space-y-10">
       <div className="flex items-end justify-between">
@@ -77,29 +90,6 @@ export default function HomeClient() {
         </section>
       )}
 
-      {!q && (
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Truyện mới</h2>
-          {latest.isLoading && <div className="text-sm">Đang tải...</div>}
-          {latest.error && <div className="text-sm text-red-600">Không tải được danh sách truyện.</div>}
-          <div className={gridClass}>
-            {(latest.data?.data || []).map((comic) => (
-              <ComicCard key={comic.id} comic={comic} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Xu hướng</h2>
-        {trending.isLoading && <div className="text-sm">Đang tải...</div>}
-        <div className={gridClass}>
-          {(trending.data?.data || []).map((comic) => (
-            <ComicCard key={comic.id} comic={comic} />
-          ))}
-        </div>
-      </section>
-
       {genre && (
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">Thể loại: {genre}</h2>
@@ -109,6 +99,62 @@ export default function HomeClient() {
             ))}
           </div>
         </section>
+      )}
+
+      {showDefault && (
+        <>
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold">Xu hướng</h2>
+            {trending.isLoading && <div className="text-sm">Đang tải...</div>}
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {(trending.data?.data || []).map((comic) => (
+                <div key={comic.id} className="min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px]">
+                  <ComicCard comic={comic} />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold">Truyện vừa cập nhật</h2>
+            {updated.isLoading && <div className="text-sm">Đang tải...</div>}
+            {updated.error && <div className="text-sm text-red-600">Không tải được danh sách truyện.</div>}
+            <div className={gridClass}>
+              {(updated.data?.data || []).map((comic) => (
+                <ComicCard key={comic.id} comic={comic} />
+              ))}
+            </div>
+            {updatePages > 1 && (
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                <button
+                  className="rounded-lg border border-black/10 px-3 py-1 disabled:opacity-40"
+                  disabled={updatePage <= 1}
+                  onClick={() => setUpdatePage((p) => Math.max(1, p - 1))}
+                >
+                  Trước
+                </button>
+                {pageButtons.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setUpdatePage(p)}
+                    className={`rounded-lg border px-3 py-1 ${
+                      p === updatePage ? "border-black bg-black text-white" : "border-black/10"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+                <button
+                  className="rounded-lg border border-black/10 px-3 py-1 disabled:opacity-40"
+                  disabled={updatePage >= updatePages}
+                  onClick={() => setUpdatePage((p) => Math.min(updatePages, p + 1))}
+                >
+                  Sau
+                </button>
+              </div>
+            )}
+          </section>
+        </>
       )}
 
       <section className="space-y-4">
