@@ -106,11 +106,9 @@ export default function HomeClient() {
           <section className="space-y-4">
             <h2 className="text-xl font-semibold">Xu hướng</h2>
             {trending.isLoading && <div className="text-sm">Đang tải...</div>}
-            <div className="flex gap-3 overflow-x-auto pb-2">
+            <div className="grid auto-cols-[70%] grid-flow-col gap-3 overflow-x-auto pb-2 sm:auto-cols-[45%] md:auto-cols-[30%] lg:auto-cols-[20%]">
               {(trending.data?.data || []).map((comic) => (
-                <div key={comic.id} className="min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px]">
-                  <ComicCard comic={comic} />
-                </div>
+                <ComicCard key={comic.id} comic={comic} />
               ))}
             </div>
           </section>
