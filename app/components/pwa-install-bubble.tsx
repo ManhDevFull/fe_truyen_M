@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -39,7 +40,10 @@ export default function PwaInstallBubble() {
   if (installed) return null;
 
   async function handleInstall() {
-    if (!deferred) return;
+    if (!deferred) {
+      toast.message("Trình duyệt chưa hỗ trợ cài tự động. Vui lòng dùng menu Add to Home Screen.");
+      return;
+    }
     await deferred.prompt();
     const choice = await deferred.userChoice;
     if (choice.outcome === "accepted") {
