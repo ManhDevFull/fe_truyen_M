@@ -115,7 +115,6 @@ export default function HomeClient() {
         <>
           <section className="space-y-4">
             <h2 className="text-xl font-semibold">Xu hướng</h2>
-            {trending.isLoading && <div className="text-sm">Đang tải...</div>}
             <div className="grid auto-cols-[60%] grid-flow-col gap-3 overflow-x-auto pb-2 sm:auto-cols-[45%] md:auto-cols-[30%] lg:auto-cols-[20%]">
               {trending.isLoading
                 ? Array.from({ length: 5 }).map((_, idx) => <ComicSkeleton key={`trend-skel-${idx}`} />)
@@ -125,7 +124,6 @@ export default function HomeClient() {
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold">Truyện vừa cập nhật</h2>
-            {updated.isLoading && <div className="text-sm">Đang tải...</div>}
             {updated.error && <div className="text-sm text-red-600">Không tải được danh sách truyện.</div>}
             <div className={gridClass}>
               {updated.isLoading
