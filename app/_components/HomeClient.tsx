@@ -56,6 +56,16 @@ export default function HomeClient() {
     );
   };
 
+  const ComicSkeleton = () => (
+    <div className="rounded-xl border border-black/10 bg-white p-2">
+      <div className="aspect-[3/4] w-full animate-pulse rounded-lg bg-black/10" />
+      <div className="mt-2 space-y-1">
+        <div className="h-3 w-3/4 animate-pulse rounded bg-black/10" />
+        <div className="h-3 w-1/2 animate-pulse rounded bg-black/5" />
+      </div>
+    </div>
+  );
+
   const updateTotal = updated.data?.total ?? 0;
   const updateLimit = updated.data?.limit ?? 20;
   const updatePages = Math.max(1, Math.ceil(updateTotal / updateLimit));
@@ -106,10 +116,10 @@ export default function HomeClient() {
           <section className="space-y-4">
             <h2 className="text-xl font-semibold">Xu hướng</h2>
             {trending.isLoading && <div className="text-sm">Đang tải...</div>}
-            <div className="grid auto-cols-[70%] grid-flow-col gap-3 overflow-x-auto pb-2 sm:auto-cols-[45%] md:auto-cols-[30%] lg:auto-cols-[20%]">
-              {(trending.data?.data || []).map((comic) => (
-                <ComicCard key={comic.id} comic={comic} />
-              ))}
+            <div className="grid auto-cols-[60%] grid-flow-col gap-3 overflow-x-auto pb-2 sm:auto-cols-[45%] md:auto-cols-[30%] lg:auto-cols-[20%]">
+              {trending.isLoading
+                ? Array.from({ length: 5 }).map((_, idx) => <ComicSkeleton key={`trend-skel-${idx}`} />)
+                : (trending.data?.data || []).map((comic) => <ComicCard key={comic.id} comic={comic} />)}
             </div>
           </section>
 
@@ -118,9 +128,9 @@ export default function HomeClient() {
             {updated.isLoading && <div className="text-sm">Đang tải...</div>}
             {updated.error && <div className="text-sm text-red-600">Không tải được danh sách truyện.</div>}
             <div className={gridClass}>
-              {(updated.data?.data || []).map((comic) => (
-                <ComicCard key={comic.id} comic={comic} />
-              ))}
+              {updated.isLoading
+                ? Array.from({ length: 8 }).map((_, idx) => <ComicSkeleton key={`upd-skel-${idx}`} />)
+                : (updated.data?.data || []).map((comic) => <ComicCard key={comic.id} comic={comic} />)}
             </div>
             {updatePages > 1 && (
               <div className="flex flex-wrap items-center gap-2 text-sm">

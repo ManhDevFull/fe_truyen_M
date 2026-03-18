@@ -4,6 +4,8 @@ import { useAuthStore } from "./store";
 
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const token = useAuthStore.getState().token;
+  const method = init?.method ? init.method.toUpperCase() : "GET";
+  const cacheMode = method === "GET" ? "default" : "no-store";
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
     credentials: "include",
@@ -12,7 +14,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init?.headers || {})
     },
-    cache: "no-store"
+    cache: cacheMode
   });
 
   if (res.status === 401 && path !== "/api/auth/refresh") {
@@ -27,7 +29,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
           ...(retryToken ? { Authorization: `Bearer ${retryToken}` } : {}),
           ...(init?.headers || {})
         },
-        cache: "no-store"
+        cache: cacheMode
       });
       if (retry.ok) {
         return (await retry.json()) as T;

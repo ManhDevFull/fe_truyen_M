@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import SiteHeader from "./components/site-header";
 import FollowNotifications from "./components/follow-notifications";
 import AdblockGuard from "./components/adblock-guard";
+import PwaInstallBubble from "./components/pwa-install-bubble";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -42,6 +43,7 @@ export default function RootLayout({
           <Providers>
             <Toaster richColors position="top-right" />
             <AdblockGuard />
+            <PwaInstallBubble />
             <FollowNotifications />
             <main className="container flex-1 !pb-0 pt-5">{children}</main>
             <footer className="mt-6 border-t border-black/10 bg-white">
