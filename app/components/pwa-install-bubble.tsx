@@ -12,6 +12,7 @@ export default function PwaInstallBubble() {
   const [open, setOpen] = useState(false);
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
     const checkInstalled = () => {
@@ -20,6 +21,8 @@ export default function PwaInstallBubble() {
         (window.navigator as any).standalone === true;
       setInstalled(standalone);
     };
+    const ua = navigator.userAgent.toLowerCase();
+    setIsIOS(/iphone|ipad|ipod/.test(ua));
 
     checkInstalled();
     const onInstalled = () => setInstalled(true);
@@ -41,7 +44,11 @@ export default function PwaInstallBubble() {
 
   async function handleInstall() {
     if (!deferred) {
-      toast.message("Trình duyệt chưa hỗ trợ cài tự động. Vui lòng dùng menu Add to Home Screen.");
+      toast.message(
+        isIOS
+          ? "iOS chưa hỗ trợ cài tự động. Mở menu chia sẻ và chọn Add to Home Screen."
+          : "Trình duyệt chưa sẵn sàng cài tự động. Hãy mở menu và chọn Install app."
+      );
       return;
     }
     await deferred.prompt();
@@ -72,17 +79,18 @@ export default function PwaInstallBubble() {
 
             {!deferred && (
               <div className="mt-3 text-xs text-black/50">
-                Nếu bạn dùng iOS Safari, hãy mở menu chia sẻ và chọn “Add to Home Screen”.
+                {isIOS
+                  ? "iOS Safari: mở menu chia sẻ và chọn “Add to Home Screen”."
+                  : "Chrome/Edge: mở menu trình duyệt và chọn “Install app”. Nếu chưa thấy, hãy sử dụng thêm một lúc hoặc refresh."}
               </div>
             )}
 
             <div className="mt-4 flex flex-wrap gap-2">
               <button
                 onClick={handleInstall}
-                disabled={!deferred}
-                className="rounded-lg bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
+                className="rounded-lg bg-black px-4 py-2 text-sm text-white"
               >
-                Cài đặt ngay
+                {deferred ? "Cài đặt ngay" : "Hướng dẫn cài đặt"}
               </button>
               <button
                 onClick={() => setOpen(false)}
