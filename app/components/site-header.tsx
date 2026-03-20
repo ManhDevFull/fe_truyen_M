@@ -93,6 +93,12 @@ export default function SiteHeader() {
           </div>
         </form>
         <nav className="flex items-center gap-4 text-sm">
+          <Link href="/about" className="hidden text-black/60 hover:underline md:inline-flex">
+            Giới thiệu
+          </Link>
+          <Link href="/contact" className="hidden text-black/60 hover:underline md:inline-flex">
+            Liên hệ
+          </Link>
           {user ? (
             <>
               <Link href="/me" className="text-black/60 hover:underline">

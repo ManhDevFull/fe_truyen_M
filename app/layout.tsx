@@ -8,10 +8,47 @@ import AdblockGuard from "./components/adblock-guard";
 import PwaInstallBubble from "./components/pwa-install-bubble";
 import Link from "next/link";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "TruyenM",
-  description: "Nền tảng đọc truyện nhẹ và nhanh",
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "TruyenM",
+    template: "%s | TruyenM"
+  },
+  description: "Nền tảng đọc truyện nhẹ, nhanh, tối ưu cho di động và PWA.",
+  keywords: ["truyenm", "doc truyen", "truyen tranh", "truyen chu", "pwa"],
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    title: "TruyenM",
+    description: "Nền tảng đọc truyện nhẹ, nhanh, tối ưu cho di động và PWA.",
+    url: siteUrl,
+    siteName: "TruyenM",
+    locale: "vi_VN",
+    type: "website",
+    images: [
+      {
+        url: "/logo.png",
+        width: 237,
+        height: 194,
+        alt: "TruyenM"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TruyenM",
+    description: "Nền tảng đọc truyện nhẹ, nhanh, tối ưu cho di động và PWA.",
+    images: ["/logo.png"]
+  },
+  robots: {
+    index: true,
+    follow: true
+  }
 };
 
 export default function RootLayout({
@@ -73,6 +110,11 @@ export default function RootLayout({
                     <li>
                       <Link href="/about" className="hover:underline">
                         Về chúng tôi
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/contact" className="hover:underline">
+                        Liên hệ với chúng tôi
                       </Link>
                     </li>
                     <li>

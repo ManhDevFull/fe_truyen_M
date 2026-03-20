@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Chính Sách Bảo Mật",
+  description: "Chính sách bảo mật của TruyenM về dữ liệu tài khoản, cookie, lịch sử đọc và quyền riêng tư người dùng."
+};
+
 export default function PrivacyPage() {
   return (
     <div className="max-w-3xl space-y-6">

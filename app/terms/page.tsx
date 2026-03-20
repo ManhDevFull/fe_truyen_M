@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Điều Khoản Dịch Vụ",
+  description: "Điều khoản sử dụng dịch vụ TruyenM, quyền và nghĩa vụ của người dùng khi đọc truyện và sử dụng tài khoản."
+};
+
 export default function TermsPage() {
   return (
     <div className="max-w-3xl space-y-6">

@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Giới Thiệu",
+  description: "Thông tin về TruyenM, định hướng nội dung, tiêu chuẩn chất lượng và cách vận hành nền tảng."
+};
+
 export default function AboutPage() {
   return (
     <div className="max-w-3xl space-y-6">
@@ -17,6 +24,12 @@ export default function AboutPage() {
         <li>Tôn trọng bản quyền và quyền sở hữu trí tuệ.</li>
         <li>Ưu tiên trải nghiệm đọc ổn định, nhanh và an toàn.</li>
         <li>Tuân thủ quy định pháp luật liên quan đến nội dung số.</li>
+      </ul>
+      <h2 className="text-xl font-semibold">Cam kết chất lượng nội dung</h2>
+      <ul className="list-disc space-y-2 pl-5 text-sm text-black/70">
+        <li>Ưu tiên nội dung rõ nguồn, trình bày sạch, dễ đọc trên cả desktop và mobile.</li>
+        <li>Không chấp nhận nội dung bị hạn chế theo chính sách quảng cáo như nội dung người lớn, bạo lực cực đoan hoặc lời nói thù hận.</li>
+        <li>Duy trì nhịp cập nhật đều đặn để người đọc luôn có nội dung mới và hữu ích.</li>
       </ul>
       <h2 className="text-xl font-semibold">Liên hệ</h2>
       <p className="text-sm text-black/70">
